@@ -1,6 +1,4 @@
-﻿using Backend.Models;
-
-namespace Backend.Repositories.Interfaces
+﻿namespace Backend.Repositories.Interfaces
 {
     public interface ITaskRepository
     {

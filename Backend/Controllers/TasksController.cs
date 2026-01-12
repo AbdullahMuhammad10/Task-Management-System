@@ -1,10 +1,4 @@
-﻿using Backend.Dtos;
-using Backend.Helper;
-using Backend.Models;
-using Backend.Repositories.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Backend.Controllers
+﻿namespace Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

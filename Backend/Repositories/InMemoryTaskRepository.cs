@@ -1,7 +1,4 @@
-﻿using Backend.Models;
-using Backend.Repositories.Interfaces;
-
-namespace Backend.Repositories
+﻿namespace Backend.Repositories
 {
     public class InMemoryTaskRepository : ITaskRepository
     {

@@ -1,7 +1,4 @@
-﻿using Backend.Repositories;
-using Backend.Repositories.Interfaces;
-
-namespace Backend;
+﻿namespace Backend;
 
 
 // Changed Structure To Old Program Style From Old Project 😅.
@@ -18,24 +15,42 @@ public class Program
         // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
         Builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
 
-        var App = Builder.Build();
+
+        // Customizing The Validation Error Response.
+        Builder.Services.Configure<ApiBehaviorOptions>(cfg =>
+        {
+            cfg.InvalidModelStateResponseFactory = context =>
+            {
+                var errors = context.ModelState.Where(P => P.Value!.Errors.Any())
+                                               .SelectMany(P => P.Value!.Errors)
+                                               .Select(E => E.ErrorMessage)
+                                               .ToArray();
+                var errorResponse = new ApiValidationErrorResponse
+                {
+                    Errors = errors
+                };
+                return new BadRequestObjectResult(errorResponse);
+            };
+        }
+        );
+
+        var app = Builder.Build();
 
         // Configure The HTTP Request Pipeline.
-        if(App.Environment.IsDevelopment())
+        if(app.Environment.IsDevelopment())
         {
-            App.MapOpenApi();
-            App.UseSwaggerUI(Options =>
+            app.MapOpenApi();
+            app.UseSwaggerUI(Options =>
             {
                 Options.SwaggerEndpoint("/openapi/v1.json","Tasks Api");
             });
         }
 
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
 
-        App.UseHttpsRedirection();
-        App.UseAuthorization();
+        app.MapControllers();
 
-        App.MapControllers();
-
-        App.Run();
+        app.Run();
     }
 }
