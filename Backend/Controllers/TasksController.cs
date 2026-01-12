@@ -30,7 +30,7 @@ namespace Backend.Controllers
             //var tasks = taskRepository.GetAll();
             //return Ok(tasks) ;
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         // GET: api/Tasks/1
         public ActionResult<TaskItem> GetTaskById(int id)
         {
@@ -62,7 +62,7 @@ namespace Backend.Controllers
             return CreatedAtAction(nameof(GetTaskById),new { id = task.Id },task);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         // PUT: api/Tasks/1
         public ActionResult UpdateTask(int id,[FromBody] UpdateTaskDto taskDto)
         {
@@ -86,5 +86,15 @@ namespace Backend.Controllers
 
         }
 
+        // DELETE: api/Tasks/1
+        [HttpDelete("{id:int}")]
+        public ActionResult DeleteTask(int id)
+        {
+            var taskToDelete = taskRepository.GetById(id);
+            if(taskToDelete == null)
+                return NotFound("Task Not Found!");
+            taskRepository.Delete(id);
+            return NoContent();
+        }
     }
 }
