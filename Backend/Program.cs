@@ -10,6 +10,7 @@ public class Program
 
         // Add Services To The Container.
         builder.Services.AddControllers();
+
         builder.Services.AddOpenApi();
 
         // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
@@ -33,12 +34,17 @@ public class Program
             };
         }
         );
+
+        // To Register Our Custom Middleware For Handling Exceptions Globally.
         builder.Services.AddTransient<ExceptionMiddleware>();
 
         var app = builder.Build();
 
-        // To Add Exception Our Custom Middleware To Handle Server Errors
+        // To Add Our Custom Middleware To Handle Server Errors
         app.UseMiddleware<ExceptionMiddleware>();
+
+        // Middleware To Handle Missing Routes Using StatusCodePages
+        app.UseStatusCodePagesWithReExecute("/error/{0}");
 
         // Configure The HTTP Request Pipeline.
         if(app.Environment.IsDevelopment())
@@ -51,6 +57,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+
         app.UseAuthorization();
 
         app.MapControllers();
