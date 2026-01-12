@@ -6,18 +6,18 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var Builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
         // Add Services To The Container.
-        Builder.Services.AddControllers();
-        Builder.Services.AddOpenApi();
+        builder.Services.AddControllers();
+        builder.Services.AddOpenApi();
 
         // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
-        Builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
+        builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
 
 
         // Customizing The Validation Error Response.
-        Builder.Services.Configure<ApiBehaviorOptions>(cfg =>
+        builder.Services.Configure<ApiBehaviorOptions>(cfg =>
         {
             cfg.InvalidModelStateResponseFactory = context =>
             {
@@ -33,8 +33,12 @@ public class Program
             };
         }
         );
+        builder.Services.AddTransient<ExceptionMiddleware>();
 
-        var app = Builder.Build();
+        var app = builder.Build();
+
+        // To Add Exception Our Custom Middleware To Handle Server Errors
+        app.UseMiddleware<ExceptionMiddleware>();
 
         // Configure The HTTP Request Pipeline.
         if(app.Environment.IsDevelopment())
