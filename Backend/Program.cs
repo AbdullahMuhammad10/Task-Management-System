@@ -1,41 +1,36 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿using Backend.Repositories;
+using Backend.Repositories.Interfaces;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+namespace Backend;
 
-var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Changed Structure To Old Program Style From Old Project 😅.
+public class Program
 {
-    app.MapOpenApi();
-}
+    public static void Main(string[] args)
+    {
+        var Builder = WebApplication.CreateBuilder(args);
 
-app.UseHttpsRedirection();
+        // Add Services To The Container.
+        Builder.Services.AddControllers();
+        Builder.Services.AddOpenApi();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+        // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
+        Builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+        var App = Builder.Build();
 
-app.Run();
+        // Configure The HTTP Request Pipeline.
+        if(App.Environment.IsDevelopment())
+        {
+            App.MapOpenApi();
+        }
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        App.UseHttpsRedirection();
+        App.UseAuthorization();
+
+        App.MapControllers();
+
+        App.Run();
+    }
 }
