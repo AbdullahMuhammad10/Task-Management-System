@@ -1,4 +1,5 @@
 ﻿using Backend.Dtos;
+using Backend.Helper;
 using Backend.Models;
 using Backend.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace Backend.Controllers
             var task = taskRepository.GetById(id);
             // Check If Task Is Null And Return NotFound If It Is.
             if(task == null)
-                return NotFound();
+                return NotFound(new GeneralErrorResponse(404,"Task Not Found"));
             // Return The Found Task.
             return Ok(task);
         }
@@ -49,7 +50,7 @@ namespace Backend.Controllers
             // CReate New Task With The Same Info Of Given Task
             var task = new TaskItem
             {
-                Title = taskDto.Title,
+                Title = taskDto.Title ?? "",
                 Description = taskDto.Description,
                 CreatedAt = DateTime.UtcNow,
                 IsCompleted = false // New Task Is Not Completed By Default.
@@ -69,7 +70,7 @@ namespace Backend.Controllers
             // Check If This Task Is Already Exists
             var taskToUpdate = taskRepository.GetById(id);
             if(taskToUpdate == null)
-                return NotFound("Task Not Found!");
+                return NotFound(new GeneralErrorResponse(404,"Task Not Found!"));
 
             // Mapping From Dto To Domain Model
             taskToUpdate.Title = taskDto.Title ?? taskToUpdate.Title; // To Keep Old Data If No New Data Sent
@@ -92,7 +93,7 @@ namespace Backend.Controllers
         {
             var taskToDelete = taskRepository.GetById(id);
             if(taskToDelete == null)
-                return NotFound("Task Not Found!");
+                return NotFound(new GeneralErrorResponse(404,"Task Not Found!"));
             taskRepository.Delete(id);
             return NoContent();
         }
