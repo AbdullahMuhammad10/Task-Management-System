@@ -24,7 +24,12 @@ public class Program
         if(App.Environment.IsDevelopment())
         {
             App.MapOpenApi();
+            App.UseSwaggerUI(Options =>
+            {
+                Options.SwaggerEndpoint("/openapi/v1.json","Tasks Api");
+            });
         }
+
 
         App.UseHttpsRedirection();
         App.UseAuthorization();

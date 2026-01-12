@@ -44,14 +44,16 @@ namespace Backend.Controllers
 
         [HttpPost]
         //POST: api/Tasks
-        public ActionResult<Task> CreateTask([FromBody] AddTaskDto taskDto)
+        public ActionResult CreateTask([FromBody] AddTaskDto taskDto)
         {
             // CReate New Task With The Same Info Of Given Task
             var task = new TaskItem
             {
                 Title = taskDto.Title,
                 Description = taskDto.Description,
+                CreatedAt = DateTime.UtcNow,
                 IsCompleted = false // New Task Is Not Completed By Default.
+
             };
             taskRepository.Add(task);
 
@@ -65,22 +67,24 @@ namespace Backend.Controllers
         public ActionResult UpdateTask(int id,[FromBody] UpdateTaskDto taskDto)
         {
             // Check If This Task Is Already Exists
-            var existingTask = taskRepository.GetById(id);
-            if(existingTask == null)
+            var taskToUpdate = taskRepository.GetById(id);
+            if(taskToUpdate == null)
                 return NotFound("Task Not Found!");
 
             // Mapping From Dto To Domain Model
-            existingTask.Title = taskDto.Title ?? existingTask.Title; // To Keep Old Data If No New Data Sent
-            existingTask.Description = taskDto.Description ?? existingTask.Description;
+            taskToUpdate.Title = taskDto.Title ?? taskToUpdate.Title; // To Keep Old Data If No New Data Sent
+            taskToUpdate.Description = taskDto.Description ?? taskToUpdate.Description;
 
             // Only Update IsCompleted If Is Has Value
             if(taskDto.IsCompleted.HasValue)
-                existingTask.IsCompleted = taskDto.IsCompleted.Value;
+                taskToUpdate.IsCompleted = taskDto.IsCompleted.Value;
 
             // Update The Repository
-            taskRepository.Update(existingTask);
+            taskRepository.Update(taskToUpdate);
 
             return NoContent();
+
         }
+
     }
 }
