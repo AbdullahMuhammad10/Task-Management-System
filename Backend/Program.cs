@@ -16,6 +16,16 @@ public class Program
         // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
         builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
 
+        // Registering CORS To Allow Requests From Angular Application.
+        builder.Services.AddCors(Options =>
+        {
+            Options.AddPolicy("AngularPolicy",Policy =>
+            {
+                Policy.WithOrigins("http://localhost:4200") // Angular URL
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
 
         // Customizing The Validation Error Response.
         builder.Services.Configure<ApiBehaviorOptions>(cfg =>
@@ -55,6 +65,9 @@ public class Program
                 Options.SwaggerEndpoint("/openapi/v1.json","Tasks Api");
             });
         }
+
+        // Enabling CORS Middleware
+        app.UseCors("AngularPolicy");
 
         app.UseHttpsRedirection();
 
