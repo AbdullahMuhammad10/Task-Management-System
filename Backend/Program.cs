@@ -1,41 +1,80 @@
-var builder = WebApplication.CreateBuilder(args);
+﻿namespace Backend;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Changed Structure To Old Program Style From Old Project 😅.
+public class Program
 {
-    app.MapOpenApi();
-}
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-app.UseHttpsRedirection();
+        // Add Services To The Container.
+        builder.Services.AddControllers();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+        builder.Services.AddOpenApi();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+        // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
+        builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
 
-app.Run();
+        // Registering CORS To Allow Requests From Angular Application.
+        builder.Services.AddCors(Options =>
+        {
+            Options.AddPolicy("AngularPolicy",Policy =>
+            {
+                Policy.WithOrigins("http://localhost:4200") // Angular URL
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        // Customizing The Validation Error Response.
+        builder.Services.Configure<ApiBehaviorOptions>(cfg =>
+        {
+            cfg.InvalidModelStateResponseFactory = context =>
+            {
+                var errors = context.ModelState.Where(P => P.Value!.Errors.Any())
+                                               .SelectMany(P => P.Value!.Errors)
+                                               .Select(E => E.ErrorMessage)
+                                               .ToArray();
+                var errorResponse = new ApiValidationErrorResponse
+                {
+                    Errors = errors
+                };
+                return new BadRequestObjectResult(errorResponse);
+            };
+        }
+        );
+
+        // To Register Our Custom Middleware For Handling Exceptions Globally.
+        builder.Services.AddTransient<ExceptionMiddleware>();
+
+        var app = builder.Build();
+
+        // To Add Our Custom Middleware To Handle Server Errors
+        app.UseMiddleware<ExceptionMiddleware>();
+
+        // Middleware To Handle Missing Routes Using StatusCodePages
+        app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+        // Configure The HTTP Request Pipeline.
+        if(app.Environment.IsDevelopment())
+        {
+            app.MapOpenApi();
+            app.UseSwaggerUI(Options =>
+            {
+                Options.SwaggerEndpoint("/openapi/v1.json","Tasks Api");
+            });
+        }
+
+        // Enabling CORS Middleware
+        app.UseCors("AngularPolicy");
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+    }
 }
