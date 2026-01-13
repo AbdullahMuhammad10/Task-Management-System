@@ -12,10 +12,11 @@
 
         }
 
-        [HttpGet]
         // GET: api/Tasks
         // Using ActionResult<T> As Return Type To Provide More Flexibility In Responses.
         // And To Define The Type Of Data Being Returned (IEnumerable<Task> In This Case).
+        [HttpGet]
+        [ProducesResponseType<IEnumerable<TaskItem>>(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<TaskItem>> GetAllTasks()
         {
             // Directly Return The Result Of GetAll Method From Repository.
@@ -25,8 +26,10 @@
             //var tasks = taskRepository.GetAll();
             //return Ok(tasks) ;
         }
-        [HttpGet("{id:int}")]
         // GET: api/Tasks/1
+        [HttpGet("{id:int}")]
+        [ProducesResponseType<TaskItem>(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GeneralErrorResponse),StatusCodes.Status404NotFound)]
         public ActionResult<TaskItem> GetTaskById(int id)
         {
             var task = taskRepository.GetById(id);
@@ -37,8 +40,9 @@
             return Ok(task);
         }
 
-        [HttpPost]
         //POST: api/Tasks
+        [HttpPost]
+        [ProducesResponseType<TaskItem>(StatusCodes.Status201Created)]
         public ActionResult CreateTask([FromBody] AddTaskDto taskDto)
         {
             // CReate New Task With The Same Info Of Given Task
@@ -57,8 +61,10 @@
             return CreatedAtAction(nameof(GetTaskById),new { id = task.Id },task);
         }
 
-        [HttpPut("{id:int}")]
         // PUT: api/Tasks/1
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(GeneralErrorResponse),StatusCodes.Status404NotFound)]
         public ActionResult UpdateTask(int id,[FromBody] UpdateTaskDto taskDto)
         {
             // Check If This Task Is Already Exists
@@ -83,6 +89,8 @@
 
         // DELETE: api/Tasks/1
         [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(GeneralErrorResponse),StatusCodes.Status404NotFound)]
         public ActionResult DeleteTask(int id)
         {
             var taskToDelete = taskRepository.GetById(id);
