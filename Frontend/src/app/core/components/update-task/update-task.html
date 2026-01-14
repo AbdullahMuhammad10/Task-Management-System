@@ -1,0 +1,35 @@
+<div class="container">
+    <h3>Update Task</h3>
+
+    <form [formGroup]="UpdateForm" (ngSubmit)="OnSubmit()">
+
+        <div class="form-group">
+            <label>Task Title:</label>
+            <input type="text" formControlName="title" placeholder="Update Title">
+            @if (UpdateForm.get('title')?.invalid && UpdateForm.get('title')?.touched) {
+            <small class="error-text">Title Is Required (Min 3 Characters)</small>
+            }
+        </div>
+        <div class="form-group">
+            <label>Description:</label>
+            <textarea formControlName="description" placeholder="Update Description"></textarea>
+        </div>
+
+        <div class="form-check">
+            <label>
+                <input type="checkbox" formControlName="isCompleted">
+                Mark As Completed
+            </label>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" [disabled]="UpdateForm.invalid" class="btn-save">
+                Update Task
+            </button>
+            <button type="button" routerLink="/" class="btn-cancel">
+                Cancel
+            </button>
+        </div>
+
+    </form>
+</div>

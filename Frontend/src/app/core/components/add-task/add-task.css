@@ -1,0 +1,77 @@
+.container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+small {
+  font-size: 12px;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+button[type='submit'] {
+  background-color: #007bff;
+  color: #fff;
+}
+
+button[type='submit']:disabled {
+  background-color: #a0c4ff;
+  cursor: not-allowed;
+}
+
+button[type='button'] {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+button[routerLink] {
+  background-color: #f1f1f1;
+}

@@ -1,0 +1,23 @@
+<div class="container">
+    <h3>Add New Task</h3>
+    <!--  Bind The Form to TaskForm FormGroup And Handle Submission With OnSubmit Method -->
+    <form [formGroup]="TaskForm" (ngSubmit)="OnSubmit()">
+        <div>
+            <label>Title:</label>
+            <!-- Bind The Input To Title FormControl -->
+            <input type="text" formControlName="title">
+            @if (TaskForm.get('title')?.invalid && TaskForm.get('title')?.touched) {
+            <small style="color: red;">Title Must Be At Least 3 Characters Long.</small>
+            }
+        </div>
+        <div>
+            <label>Description:</label>
+            <!--     Bind The Textarea To Description FormControl -->
+            <textarea formControlName="description"></textarea>
+
+        </div>
+        <button type="submit" [disabled]="TaskForm.invalid">Save Task</button>
+        <button type="button" (click)="TaskForm.reset()">Clear</button>
+        <button routerLink="/">Back to List</button>
+    </form>
+</div>

@@ -1,0 +1,33 @@
+<div class="container">
+    <h2>My Tasks</h2>
+    <!-- Add New Task Button -->
+    <button routerLink='/tasks/add'>Add New Task</button>
+    @if (Tasks.length > 0) {
+    <ul>
+        @for (task of Tasks; track task.id) {
+        <li [class.completed]="task.isCompleted">
+
+            <div class="task-actions">
+                @if (!task.isCompleted) {
+                <button class="btn-complete" (click)="MarkAsCompleted(task)">
+                    Complete
+                </button>
+                }
+                <button [routerLink]="['/tasks/edit', task.id]" class="btn-update">
+                    Edit
+                </button>
+                <button class="btn-delete" (click)="DeleteTask(task.id)">
+                    Delete
+                </button>
+            </div>
+            <strong>{{ task.title }}</strong>
+            <p>{{ task.description }}</p>
+            <span>Status: {{ task.isCompleted ? 'Completed' : 'Pending' }}</span>
+
+        </li>
+        }
+    </ul>
+    } @else {
+    <p>No Tasks Found. Start Adding Some!</p>
+    }
+</div>
