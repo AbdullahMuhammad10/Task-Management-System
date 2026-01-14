@@ -1,0 +1,70 @@
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+button[routerLink] {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background-color: #ffffff;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+}
+
+li strong {
+  font-size: 16px;
+  color: #333;
+}
+
+li p {
+  margin: 8px 0;
+  color: #555;
+}
+
+li span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #007bff;
+}
+
+li button {
+  margin-top: 10px;
+  margin-right: 8px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-update {
+  background-color: #ffc107;
+  color: #000;
+}
+
+li button:last-child {
+  background-color: #dc3545;
+  color: #fff;
+}
