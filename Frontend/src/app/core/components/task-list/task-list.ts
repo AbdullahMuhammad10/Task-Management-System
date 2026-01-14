@@ -44,4 +44,15 @@ export class TaskList implements OnInit {
       },
     });
   }
+  MarkAsCompleted(Task: any): void {
+    this.taskService.MarkAsCompleted(Task.id).subscribe({
+      next: () => {
+        console.log('Task Marked As Completed Successfully');
+        this.LoadTasks();
+      },
+      error: (Err) => {
+        console.error('Error Happend:', Err.error.message);
+      },
+    });
+  }
 }

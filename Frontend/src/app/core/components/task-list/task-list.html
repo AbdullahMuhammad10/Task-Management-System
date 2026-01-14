@@ -5,13 +5,25 @@
     @if (Tasks.length > 0) {
     <ul>
         @for (task of Tasks; track task.id) {
-        <li>
+        <li [class.completed]="task.isCompleted">
+
+            <div class="task-actions">
+                @if (!task.isCompleted) {
+                <button class="btn-complete" (click)="MarkAsCompleted(task)">
+                    Complete
+                </button>
+                }
+                <button [routerLink]="['/tasks/edit', task.id]" class="btn-update">
+                    Edit
+                </button>
+                <button class="btn-delete" (click)="DeleteTask(task.id)">
+                    Delete
+                </button>
+            </div>
             <strong>{{ task.title }}</strong>
             <p>{{ task.description }}</p>
             <span>Status: {{ task.isCompleted ? 'Completed' : 'Pending' }}</span>
-            <!-- Update and Delete Buttons -->
-            <button [routerLink]="['/tasks/edit', task.id]" class="btn-update">Update</button>
-            <button (click)="DeleteTask(task.id)">Delete</button>
+
         </li>
         }
     </ul>

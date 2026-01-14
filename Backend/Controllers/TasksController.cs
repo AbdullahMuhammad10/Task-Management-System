@@ -99,5 +99,19 @@
             taskRepository.Delete(id);
             return NoContent();
         }
+
+        [HttpPatch("{id:int}")]
+        public ActionResult MarkTaskAsCompleted(int id)
+        {
+            var task = taskRepository.GetById(id);
+            if(task == null)
+                return NotFound(new GeneralErrorResponse(404,"Task Not Found !"));
+
+            if(task.IsCompleted)
+                return BadRequest(new GeneralErrorResponse(400,"Task Is Already Completed"));
+            task.IsCompleted = true;
+
+            return NoContent();
+        }
     }
 }

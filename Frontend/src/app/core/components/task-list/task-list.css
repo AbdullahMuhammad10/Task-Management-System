@@ -9,11 +9,12 @@ h2 {
   margin-bottom: 20px;
 }
 
+/* Add New Task */
 button[routerLink] {
   background-color: #28a745;
   color: #fff;
-  padding: 10px 14px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   font-weight: 600;
@@ -25,46 +26,78 @@ ul {
   padding: 0;
 }
 
+/* Task Card */
 li {
+  position: relative;
   background-color: #ffffff;
-  padding: 15px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  padding: 20px;
+  padding-top: 60px; /* مساحة للأكشنز */
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
+/* Actions Container */
+.task-actions {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+/* Shared button styles */
+.task-actions button {
+  border: none;
+  border-radius: 18px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Complete */
+.btn-complete {
+  background-color: #22c55e;
+  color: #ffffff;
+}
+
+.btn-complete:hover {
+  background-color: #16a34a;
+}
+
+/* Update */
+.btn-update {
+  background-color: #facc15;
+  color: #000;
+}
+
+/* Delete */
+.btn-delete {
+  background-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Content */
 li strong {
   font-size: 16px;
-  color: #333;
+  color: #1f2937;
 }
 
 li p {
   margin: 8px 0;
-  color: #555;
+  color: #4b5563;
 }
 
 li span {
   font-size: 13px;
   font-weight: 600;
-  color: #007bff;
+  color: #2563eb;
 }
 
-li button {
-  margin-top: 10px;
-  margin-right: 8px;
-  padding: 6px 12px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.btn-update {
-  background-color: #ffc107;
-  color: #000;
-}
-
-li button:last-child {
-  background-color: #dc3545;
-  color: #fff;
+/* Completed task */
+li.completed {
+  background-color: #f0fdf4;
+  border-left: 5px solid #22c55e;
 }

@@ -38,4 +38,9 @@ export class TaskService {
   DeleteTask(Id: number): Observable<void> {
     return this.Http.delete<void>(`${this.apiUrl}/${Id}`);
   }
+
+  // Method To Mark Task As Completed
+  MarkAsCompleted(Id: number): Observable<void> {
+    return this.Http.patch<void>(`${this.apiUrl}/${Id}`, {});
+  }
 }
