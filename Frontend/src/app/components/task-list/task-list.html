@@ -1,0 +1,18 @@
+<div class="container">
+    <h2>My Tasks</h2>
+
+    @if (Tasks.length > 0) {
+    <ul>
+        @for (task of Tasks; track task.id) {
+        <li>
+            <strong>{{ task.title }}</strong>
+            <p>{{ task.description }}</p>
+            <span>Status: {{ task.isCompleted ? 'Completed' : 'Pending' }}</span>
+            <button (click)="DeleteTask(task.id)">Delete</button>
+        </li>
+        }
+    </ul>
+    } @else {
+    <p>No Tasks Found. Start Adding Some!</p>
+    }
+</div>
