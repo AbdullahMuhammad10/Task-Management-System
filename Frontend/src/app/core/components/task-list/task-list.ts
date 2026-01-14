@@ -1,10 +1,12 @@
-import { TaskService } from '../../core/services/task';
-import { TaskItem } from './../../core/models/task';
+import { TaskService } from '../../services/task';
+import { TaskItem } from '../../models/task';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-task-list',
-  imports: [],
+  imports: [RouterLink, CommonModule],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css',
 })
@@ -12,13 +14,7 @@ export class TaskList implements OnInit {
   // This Array To Hold The List Of Tasks From The Backend
   Tasks: TaskItem[] = [];
 
-  constructor(private taskService: TaskService) {
-    taskService.getAllTasks().subscribe({
-      next: (tasks) => {
-        this.Tasks = tasks;
-      },
-    });
-  }
+  constructor(private taskService: TaskService) {}
   ngOnInit(): void {
     this.LoadTasks();
   }
