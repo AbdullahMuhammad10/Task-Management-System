@@ -14,7 +14,10 @@ public class Program
         builder.Services.AddOpenApi();
 
         // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
-        builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
+        builder.Services.AddSingleton<ITaskRepository,SqliteTaskRepository>();
+
+        // Registering The Database Initializer As A SingletonTo Live Throughout The Application Lifetime..
+        builder.Services.AddSingleton<IDatabaseInitializer,DatabaseInitializer>();
 
         // Registering CORS To Allow Requests From Angular Application.
         builder.Services.AddCors(Options =>
@@ -49,6 +52,16 @@ public class Program
         builder.Services.AddTransient<ExceptionMiddleware>();
 
         var app = builder.Build();
+
+        // Initialize The Database On Application Startup.
+        // Create A Scope To Get The Scoped Services.
+        using(var scope = app.Services.CreateScope())
+        {
+            // Get The Database Initializer Service From Scope.
+            var databaseInitializer = scope.ServiceProvider.GetRequiredService<IDatabaseInitializer>();
+            // Call The InitializeDatabase Method To Seed The Database.
+            databaseInitializer.InitializeDatabase();
+        }
 
         // To Add Our Custom Middleware To Handle Server Errors
         app.UseMiddleware<ExceptionMiddleware>();

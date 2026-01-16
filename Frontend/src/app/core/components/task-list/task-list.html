@@ -10,7 +10,7 @@
             <div class="task-actions">
                 @if (!task.isCompleted) {
                 <button class="btn-complete" (click)="MarkAsCompleted(task)">
-                    Complete
+                    Mark As Completed
                 </button>
                 }
                 <button [routerLink]="['/tasks/edit', task.id]" class="btn-update">
@@ -22,6 +22,7 @@
             </div>
             <strong>{{ task.title }}</strong>
             <p>{{ task.description }}</p>
+            <p>{{ task.createdAt }}</p>
             <span>Status: {{ task.isCompleted ? 'Completed' : 'Pending' }}</span>
 
         </li>
