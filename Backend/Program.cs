@@ -1,6 +1,4 @@
-﻿using Backend.Interfaces;
-
-namespace Backend;
+﻿namespace Backend;
 
 
 // Changed Structure To Old Program Style From Old Project 😅.
@@ -16,7 +14,7 @@ public class Program
         builder.Services.AddOpenApi();
 
         // Register The Repository To Allow Di As A Singleton To Live Throughout The Application Lifetime.
-        builder.Services.AddSingleton<ITaskRepository,InMemoryTaskRepository>();
+        builder.Services.AddSingleton<ITaskRepository,SqliteTaskRepository>();
 
         // Registering The Database Initializer As A SingletonTo Live Throughout The Application Lifetime..
         builder.Services.AddSingleton<IDatabaseInitializer,DatabaseInitializer>();

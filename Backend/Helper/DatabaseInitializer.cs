@@ -1,7 +1,4 @@
-﻿using Backend.Interfaces;
-using Microsoft.Data.Sqlite;
-
-namespace Backend.Helper
+﻿namespace Backend.Helper
 {
     public class DatabaseInitializer : IDatabaseInitializer
     {

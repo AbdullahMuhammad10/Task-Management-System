@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Data.Sqlite;
-
-namespace Backend.Repositories
+﻿namespace Backend.Repositories
 {
     public class SqliteTaskRepository : ITaskRepository
     {
@@ -10,7 +7,7 @@ namespace Backend.Repositories
         public SqliteTaskRepository(IConfiguration configuration)
         {
             // Get The Connection String From Configuration
-            connectionString = configuration.GetConnectionString("DefaultConnection")!;
+            connectionString = configuration.GetConnectionString("SqliteConnection")!;
         }
         public IEnumerable<TaskItem> GetAll()
         {
