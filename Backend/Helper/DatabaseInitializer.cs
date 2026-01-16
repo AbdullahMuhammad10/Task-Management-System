@@ -11,7 +11,7 @@ namespace Backend.Helper
         public DatabaseInitializer(IConfiguration configuration)
         {
             // Get The Connection String From Configuration
-            connectionString = configuration.GetConnectionString("DefaultConnection")
+            connectionString = configuration.GetConnectionString("SqliteConnection")
                 ?? throw new Exception("No Connection String Found"); // Throw Exception If No Connection String Found
         }
         public void InitializeDatabase()
@@ -29,6 +29,7 @@ namespace Backend.Helper
             CREATE TABLE IF NOT EXISTS Tasks (
                 Id INTEGER PRIMARY KEY AUTOINCREMENT,
                 Title TEXT NOT NULL,
+                Description TEXT,
                 IsCompleted BOOLEAN NOT NULL DEFAULT 0,
                 CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
             );";
